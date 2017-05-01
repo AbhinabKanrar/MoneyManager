@@ -15,7 +15,7 @@ public interface CommonConstant {
 	String URL_CSS = "/css/**";
 	String URL_JS = "/js/**";
 	String URL_IMG = "/img/**";
-	String URL_DEFAULT_SUCCESS = "/dashboard";
+	String URL_DEFAULT_SUCCESS = "/";
 	String COOKIE_JSESSIONID = "JSESSIONID";
 	int MAX_SESSION = 1;
 
