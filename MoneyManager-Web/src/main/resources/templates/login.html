@@ -1,12 +1,33 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Money Manager</title>
-<link rel="stylesheet" href="/css/lib/w3.css"/>
+<link rel="stylesheet" href="/css/lib/w3.css" />
+<link rel="stylesheet" href="/css/lib/font-awesome.min.css" />
+<link rel="stylesheet" href="/css/app.css" />
 </head>
 <body>
-hello money manageer
+	<div>
+		<br/><br/>
+	</div>
+	<div class="loginbox w3-row w3-white w3-border">
+		<div class="w3-center">Money Manager</div>
+		<form class="w3-container" autocomplete="off">
+			<p>
+			<label><i class="w3-xxlarge fa fa-user"></i></label> 
+			<input class="w3-input" type="text" placeholder="Enter Username" name="username" required="required"/>
+			</p>
+			<p>
+			<label><i class="w3-xxlarge fa fa-key"></i></label>
+			<input class="w3-input" type="password" placeholder="Enter Password" name="password" required="required"/>
+			</p>
+			<p>
+			<button class="w3-button w3-block w3-blue" type="submit">Login</button>
+			</p>
+		</form>
+	</div>
 </body>
 </html>
+<!-- w3-topbar w3-rightbar w3-bottombar w3-leftbar w3-border-blue" -->
