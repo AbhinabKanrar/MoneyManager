@@ -13,8 +13,8 @@
 		<br/><br/>
 	</div>
 	<div class="loginbox w3-row w3-white w3-border">
-		<div class="w3-center">Money Manager</div>
-		<form class="w3-container" autocomplete="off">
+		<div class="w3-center"><b>Money Manager</b></div>
+		<form th:action="@{/login}" method="post" class="w3-container" autocomplete="off">
 			<p>
 			<label><i class="w3-xxlarge fa fa-user"></i></label> 
 			<input class="w3-input" type="text" placeholder="Enter Username" name="username" required="required"/>
@@ -24,10 +24,10 @@
 			<input class="w3-input" type="password" placeholder="Enter Password" name="password" required="required"/>
 			</p>
 			<p>
-			<button class="w3-button w3-block w3-blue" type="submit">Login</button>
+			<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+			<button class="w3-button w3-block w3-blue" type="submit"><i class="w3-xlarge fa fa-sign-in">&nbsp;&nbsp;Sign In</i></button>
 			</p>
 		</form>
 	</div>
 </body>
 </html>
-<!-- w3-topbar w3-rightbar w3-bottombar w3-leftbar w3-border-blue" -->
