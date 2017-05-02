@@ -43,7 +43,7 @@ public class GlobalAuthenticationConfig extends GlobalAuthenticationConfigurerAd
 				if (userDetail != null && userDetail.getUserStatus() == UserStatus.ACTIVE) {
 					return userDetail;
 				} else {
-					throw new UsernameNotFoundException("username : " + username + " not found");
+					throw new UsernameNotFoundException("user credential not found");
 				}
 			}
 		};

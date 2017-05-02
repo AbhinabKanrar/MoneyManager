@@ -14,6 +14,7 @@ public class UserDetail extends User {
 
 	private static final long serialVersionUID = -4259668335909442858L;
 	
+	private Long userId;
 	private String username;
 	private String password;
 	private String role;
@@ -21,16 +22,18 @@ public class UserDetail extends User {
 	private String phoneNumber;
 	private UserStatus userStatus;
 
-	public UserDetail(String username, String password, String auths, String role, String mail, String phoneNumber, UserStatus userStatus) {
-
+	public UserDetail(String username, String password, String auths) {
 		super(username, password, true, true, true, true, AuthorityUtils.createAuthorityList(auths));
-
 		this.username = username;
 		this.password = password;
-		this.role = role;
-		this.mail = mail;
-		this.phoneNumber = phoneNumber;
-		this.userStatus = userStatus;
+	}
+
+	public Long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 
 	public String getUsername() {

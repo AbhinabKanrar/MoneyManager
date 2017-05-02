@@ -11,4 +11,4 @@ CREATE TABLE IF NOT EXISTS mm.user_auth_details(
 	UNIQUE (username)
 );
 
-INSERT INTO mm.user_auth_details VALUES (2860524688118663536,'admin','$2a$11$aINNKEQ/DMB9jKB/vD0ewui6ajj/8rkntk1EKOwhJU4eMw81NEJTq','ADMIN',null,null,'ACTIVE');
+--INSERT INTO mm.user_auth_details VALUES (2860524688118663536,'admin','$2a$10$trT3.R/Nfey62eczbKEnueTcIbJXW.u1ffAo/XfyLpofwNDbEB86O','ADMIN',null,null,'ACTIVE');

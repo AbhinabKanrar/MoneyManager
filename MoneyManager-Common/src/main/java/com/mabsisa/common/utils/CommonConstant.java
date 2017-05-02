@@ -18,5 +18,8 @@ public interface CommonConstant {
 	String URL_DEFAULT_SUCCESS = "/";
 	String COOKIE_JSESSIONID = "JSESSIONID";
 	int MAX_SESSION = 1;
+	
+	int DB_RETRY_COUNT = 3;
+	int DB_RETRY_DELAY = 2000;
 
 }
