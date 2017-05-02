@@ -11,7 +11,6 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.retry.annotation.EnableRetry;
 import org.springframework.stereotype.Repository;
@@ -53,11 +52,8 @@ public class AuthenticationDaoImpl implements AuthenticationDao {
 					@Override
 					public UserDetail extractData(ResultSet rs) throws SQLException, DataAccessException {
 						if (rs.next()) {
-							UserDetail userDetail = new UserDetail("NA", "NA", "NA");
+							UserDetail userDetail = new UserDetail(rs.getString("username"), rs.getString("password"), rs.getString("role"));
 							userDetail.setUserId(rs.getLong("user_id"));
-							userDetail.setUsername(rs.getString("username"));
-							userDetail.setPassword(rs.getString("password"));
-							userDetail.setRole(rs.getString("role"));
 							userDetail.setMail(rs.getString("mail"));
 							userDetail.setPhoneNumber(rs.getString("phone_number"));
 							userDetail.setUserStatus(UserStatus.valueOf(rs.getString("user_status")));

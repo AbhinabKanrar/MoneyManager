@@ -4,4 +4,4 @@
 .header{z-index:4}
 .nav-menu{z-index:3;width:300px}
 .nav-menu-close{cursor:pointer}
-.main-ui-view{margin-left:300px;margin-top:43px}
+#ui-view{margin-left:300px;margin-top:43px}

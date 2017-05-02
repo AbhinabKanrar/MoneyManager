@@ -14,4 +14,7 @@ $(document).ready(function() {
 		navsidebar.style.display = "none";
 		navoverlay.style.display = "none";
 	});
+	$(".menu-link").click(function(e) {
+		$("#ui-view").load(e.currentTarget.getAttribute("data-link"));
+	});
 });

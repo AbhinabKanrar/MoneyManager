@@ -1,0 +1,30 @@
+<div class="w3-responsive">
+	<table class="w3-table-all">
+		<tr>
+			<th>Region</th>
+			<th>Building</th>
+			<th>Address</th>
+			<th>Client</th>
+			<th>Name</th>
+			<th>Floor</th>
+			<th>Fee</th>
+			<th>Mahal</th>
+			<th>Telephone</th>
+			<th>Left/travel</th>
+			<th>Note</th>
+		</tr>
+		<tr th:each="customerDetail : ${customerDetails}">
+			<td th:text="${customerDetail.region}"></td>
+			<td th:text="${customerDetail.building}"></td>
+			<td th:text="${customerDetail.address}"></td>
+			<td th:text="${customerDetail.client}"></td>
+			<td th:text="${customerDetail.name}"></td>
+			<td th:text="${customerDetail.floor}"></td>
+			<td th:text="${customerDetail.fee}"></td>
+			<td th:text="${customerDetail.mahal}"></td>
+			<td th:text="${customerDetail.telephone}"></td>
+			<td th:text="${customerDetail.leftTravel}"></td>
+			<td th:text="${customerDetail.note}"></td>
+		</tr>
+	</table>
+</div>
