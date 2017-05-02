@@ -1,30 +1,40 @@
-<div class="w3-responsive">
-	<table class="w3-table-all">
-		<tr>
-			<th>Region</th>
-			<th>Building</th>
-			<th>Address</th>
-			<th>Client</th>
-			<th>Name</th>
-			<th>Floor</th>
-			<th>Fee</th>
-			<th>Mahal</th>
-			<th>Telephone</th>
-			<th>Left/travel</th>
-			<th>Note</th>
-		</tr>
-		<tr th:each="customerDetail : ${customerDetails}">
-			<td th:text="${customerDetail.region}"></td>
-			<td th:text="${customerDetail.building}"></td>
-			<td th:text="${customerDetail.address}"></td>
-			<td th:text="${customerDetail.client}"></td>
-			<td th:text="${customerDetail.name}"></td>
-			<td th:text="${customerDetail.floor}"></td>
-			<td th:text="${customerDetail.fee}"></td>
-			<td th:text="${customerDetail.mahal}"></td>
-			<td th:text="${customerDetail.telephone}"></td>
-			<td th:text="${customerDetail.leftTravel}"></td>
-			<td th:text="${customerDetail.note}"></td>
-		</tr>
+<div class="w3-container w3-bottombar w3-blue w3-xlarge">
+	<i class="fa fa-users fa-fw"></i>  Customer Management
+</div>
+<div class="w3-container">
+	<p><a href="#" data-link="/customer/add" class="w3-button w3-green" id="add-new-customer">Add New Customer</a></p>
+</div>
+<div class="w3-responsive" id="div-data-customer">
+	<table id="datatable" class="display responsive nowrap cell-border" cellspacing="0" width="100%">
+		<thead>
+			<tr>
+				<th>Region</th>
+				<th>Building</th>
+				<th>Address</th>
+				<th>Client</th>
+				<th>Name</th>
+				<th>Floor</th>
+				<th>Fee</th>
+				<th>Mahal</th>
+				<th>Telephone</th>
+				<th>Left/travel</th>
+				<th>Note</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="customerDetail : ${customerDetails}">
+				<td th:text="${customerDetail.region}"></td>
+				<td th:text="${customerDetail.building}"></td>
+				<td th:text="${customerDetail.address}"></td>
+				<td th:text="${customerDetail.client}"></td>
+				<td th:text="${customerDetail.name}"></td>
+				<td th:text="${customerDetail.floor}"></td>
+				<td th:text="${customerDetail.fee}"></td>
+				<td th:text="${customerDetail.mahal}"></td>
+				<td th:text="${customerDetail.telephone}"></td>
+				<td th:text="${customerDetail.leftTravel}"></td>
+				<td th:text="${customerDetail.note}"></td>
+			</tr>
+		</tbody>
 	</table>
 </div>

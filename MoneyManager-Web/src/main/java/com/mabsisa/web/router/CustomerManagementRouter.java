@@ -38,4 +38,10 @@ public class CustomerManagementRouter {
 		return "customermanagement/listcustomer";
 	}
 	
+	@GetMapping("/add")
+	public String add(Model model) {
+		model.addAttribute("customerDetail", new CustomerDetail());
+		return "customermanagement/addcustomer";
+	}
+	
 }

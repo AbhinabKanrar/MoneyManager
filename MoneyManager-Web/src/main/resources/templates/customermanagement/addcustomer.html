@@ -1,0 +1,70 @@
+<form th:action="@{/customer/add}" th:object="${customerDetail}" method="post" class="w3-container w3-white" autocomplete="off">
+	<p>
+		<span>
+			<button class="w3-button w3-lime" type="submit">
+				<i class="w3-large fa fa-plus">&nbsp;&nbsp;Sign In</i>
+			</button>
+		</span>
+		<span>
+			<button class="w3-button w3-grey" type="submit">
+				<i class="w3-large fa fa-refresh">&nbsp;&nbsp;Reset</i>
+			</button>
+		</span>
+	</p>
+	<p>
+		<label>Region</label> 
+		<input class="w3-input" type="text" placeholder="Enter Region" th:field="*{region}" required="required"/>
+	</p>
+	<p>
+		<label>Building</label> 
+		<input class="w3-input" type="text" placeholder="Enter Building" th:field="*{building}"/>
+	</p>
+	<p>
+		<label>Address</label> 
+		<input class="w3-input" type="text" placeholder="Enter Address" th:field="*{address}" required="required"/>
+	</p>
+	<p>
+		<label>Client</label> 
+		<input class="w3-input" type="text" placeholder="Enter Client" th:field="*{client}"/>
+	</p>
+	<p>
+		<label>Name</label> 
+		<input class="w3-input" type="text" placeholder="Enter Name" th:field="*{name}"/>
+	</p>
+	<p>
+		<label>Floor</label> 
+		<input class="w3-input" type="text" placeholder="Enter Floor" th:field="*{floor}"/>
+	</p>
+	<p>
+		<label>Fee</label> 
+		<input class="w3-input" type="text" placeholder="Enter Fee" th:field="*{fee}"/>
+	</p>
+	<p>
+		<label>Mahal</label> 
+		<input class="w3-input" type="text" placeholder="Enter Mahal" th:field="*{mahal}"/>
+	</p>
+	<p>
+		<label>Telephone</label> 
+		<input class="w3-input" type="text" placeholder="Enter Telephone" th:field="*{telephone}"/>
+	</p>
+	<p>
+		<label>Left/Travel</label> 
+		<input class="w3-input" type="text" placeholder="Enter Left/Travel" th:field="*{leftTravel}"/>
+	</p>
+	<p>
+		<label>Note</label>
+		<input class="w3-input" type="text" placeholder="Enter Note" th:field="*{note}"/>
+	</p>
+	<p>
+		<span>
+			<button class="w3-button w3-lime" type="submit">
+				<i class="w3-large fa fa-plus">&nbsp;&nbsp;Sign In</i>
+			</button>
+		</span>
+		<span>
+			<button class="w3-button w3-grey" type="submit">
+				<i class="w3-large fa fa-refresh">&nbsp;&nbsp;Reset</i>
+			</button>
+		</span>
+	</p>
+</form>

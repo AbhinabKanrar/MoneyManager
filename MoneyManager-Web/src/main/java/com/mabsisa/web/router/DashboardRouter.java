@@ -19,7 +19,7 @@ public class DashboardRouter {
 	@GetMapping(CommonConstant.URL_DEFAULT_SUCCESS)
 	public String dahsboard() {
 		
-		System.out.println("CommonUtils.getLoggedInUserAccess():    "+CommonUtils.getLoggedInUserAccess());
+//		System.out.println("CommonUtils.getLoggedInUserAccess():    "+CommonUtils.getLoggedInUserAccess());
 		
 		return "dashboard";
 	}

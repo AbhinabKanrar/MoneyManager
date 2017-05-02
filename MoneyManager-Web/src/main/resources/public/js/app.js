@@ -15,6 +15,11 @@ $(document).ready(function() {
 		navoverlay.style.display = "none";
 	});
 	$(".menu-link").click(function(e) {
-		$("#ui-view").load(e.currentTarget.getAttribute("data-link"));
+		$("#ui-view").load(e.currentTarget.getAttribute("data-link"), function() {
+			$('#datatable').DataTable();
+			$("#add-new-customer").click(function() {
+				$("#div-data-customer").load('/customer/add')
+			});
+		});
 	});
 });
