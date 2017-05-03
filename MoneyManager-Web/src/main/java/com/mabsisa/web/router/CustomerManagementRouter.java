@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.mabsisa.common.model.CustomerDetail;
+import com.mabsisa.common.utils.CommonUtils;
 import com.mabsisa.service.customermanagement.CustomerManagementService;
 
 /**
@@ -35,6 +36,7 @@ public class CustomerManagementRouter {
 	public String add(Model model) {
 		CustomerDetail customerDetail = new CustomerDetail(new BigDecimal("0.00"));
 		model.addAttribute("customerDetail", customerDetail);
+		model.addAttribute("access", CommonUtils.getLoggedInUserAccess());
 		return "customermanagement/addcustomer";
 	}
 
@@ -43,6 +45,7 @@ public class CustomerManagementRouter {
 		if (!isValid(customerDetail)) {
 			model.addAttribute("message", "Invalid data detected");
 			model.addAttribute("customerDetail", customerDetail);
+			model.addAttribute("access", CommonUtils.getLoggedInUserAccess());
 			return "customermanagement/addcustomer";
 		}
 		try {
@@ -52,6 +55,7 @@ public class CustomerManagementRouter {
 			model.addAttribute("message", "Can't add customer at this moment");
 		}
 		model.addAttribute("customerDetail", customerDetail);
+		model.addAttribute("access", CommonUtils.getLoggedInUserAccess());
 		return "customermanagement/addcustomer";
 	}
 
@@ -60,6 +64,7 @@ public class CustomerManagementRouter {
 		if (!isValid(customerDetail)) {
 			model.addAttribute("message", "Invalid data detected");
 			model.addAttribute("customerDetail", customerDetail);
+			model.addAttribute("access", CommonUtils.getLoggedInUserAccess());
 			return "customermanagement/addcustomer";
 		}
 		try {
@@ -70,6 +75,7 @@ public class CustomerManagementRouter {
 		}
 		model.addAttribute("status", 1);
 		model.addAttribute("customerDetail", customerDetail);
+		model.addAttribute("access", CommonUtils.getLoggedInUserAccess());
 		return "customermanagement/addcustomer";
 	}
 
@@ -83,6 +89,7 @@ public class CustomerManagementRouter {
 		}
 		model.addAttribute("status", 2);
 		model.addAttribute("customerDetail", customerDetail);
+		model.addAttribute("access", CommonUtils.getLoggedInUserAccess());
 		return "customermanagement/addcustomer";
 	}
 	
@@ -95,6 +102,7 @@ public class CustomerManagementRouter {
 			e.printStackTrace();
 		}
 		model.addAttribute("customerDetails", customerDetails);
+		model.addAttribute("access", CommonUtils.getLoggedInUserAccess());
 		return "customermanagement/listcustomer";
 	}
 
@@ -109,6 +117,7 @@ public class CustomerManagementRouter {
 		}
 		model.addAttribute("status", 1);
 		model.addAttribute("customerDetail", customerDetail);
+		model.addAttribute("access", CommonUtils.getLoggedInUserAccess());
 		return "customermanagement/addcustomer";
 	}
 
@@ -119,5 +128,5 @@ public class CustomerManagementRouter {
 		}
 		return false;
 	}
-
+	
 }

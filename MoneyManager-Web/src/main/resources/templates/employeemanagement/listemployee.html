@@ -35,11 +35,11 @@
 		<div class="w3-bar-block">
 		    <a href="#" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black nav-menu-button-close" title="close menu"><i class="fa fa-remove fa-fw"></i>  Close Menu</a>
 		    <a th:if="${#strings.equalsIgnoreCase(access,'ADMIN') || #strings.equalsIgnoreCase(access,'ADMIN_ASSISTANT')}" 
-		    	href="/customer/view" class="w3-bar-item w3-button w3-padding w3-blue">
+		    	href="/customer/view" class="w3-bar-item w3-button w3-padding">
 		    	<i class="fa fa-users fa-fw"></i>  Customer Management
 		    </a>
 		    <a th:if="${#strings.equalsIgnoreCase(access,'ADMIN') || #strings.equalsIgnoreCase(access,'ADMIN_ASSISTANT')}" 
-		    	href="/employee/view" class="w3-bar-item w3-button w3-padding">
+		    	href="/employee/view" class="w3-bar-item w3-button w3-padding w3-blue">
 		    	<i class="fa fa-eye fa-fw"></i>  Employee Management
 		    </a>
 		    <a th:if="${#strings.equalsIgnoreCase(access,'ADMIN') || #strings.equalsIgnoreCase(access,'COLLECTOR')}" 
@@ -55,11 +55,11 @@
 		title="close side menu" id="navoverlay"></div>
 	<div class="w3-main" id="ui-view">
 		<div class="w3-container w3-bottombar w3-blue w3-xlarge">
-			<i class="fa fa-users fa-fw"></i> Customer Management
+			<i class="fa fa-users fa-fw"></i> Employee Management
 		</div>
 		<div class="w3-container">
 			<p>
-				<a href="/customer/add" class="w3-button w3-green">Add New Customer</a>
+				<a href="/employee/add" class="w3-button w3-green">Add New Employee</a>
 			</p>
 		</div>
 		<div class="w3-responsive" id="div-data-customer">
@@ -67,34 +67,22 @@
 				cellspacing="0" width="100%">
 				<thead>
 					<tr>
-						<th>Region</th>
-						<th>Building</th>
-						<th>Address</th>
-						<th>Client</th>
-						<th>Name</th>
-						<th>Floor</th>
-						<th>Fee</th>
-						<th>Mahal</th>
-						<th>Telephone</th>
-						<th>Left/travel</th>
-						<th>Note</th>
+						<th>Username</th>
+						<th>Role</th>
+						<th>Mail</th>
+						<th>Phone Number</th>
+						<th>User Status</th>
 						<th>Action</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:each="customerDetail : ${customerDetails}">
-						<td th:text="${customerDetail.region}"></td>
-						<td th:text="${customerDetail.building}"></td>
-						<td th:text="${customerDetail.address}"></td>
-						<td th:text="${customerDetail.client}"></td>
-						<td th:text="${customerDetail.name}"></td>
-						<td th:text="${customerDetail.floor}"></td>
-						<td th:text="${customerDetail.fee}"></td>
-						<td th:text="${customerDetail.mahal}"></td>
-						<td th:text="${customerDetail.telephone}"></td>
-						<td th:text="${customerDetail.leftTravel}"></td>
-						<td th:text="${customerDetail.note}"></td>
-						<td><a th:href="@{|/customer/update/${customerDetail.customerId}|}" class="w3-button w3-green">Edit</a></td>
+					<tr th:each="employee : ${employees}">
+						<td th:text="${employee.username}"></td>
+						<td th:text="${employee.role}"></td>
+						<td th:text="${employee.mail}"></td>
+						<td th:text="${employee.phoneNumber}"></td>
+						<td th:text="${employee.userStatus}"></td>
+						<td><a th:href="@{|/employee/update/${employee.employeeId}|}" class="w3-button w3-green">Edit</a></td>
 					</tr>
 				</tbody>
 			</table>
