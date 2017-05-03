@@ -27,6 +27,12 @@ public class CustomerDetail implements Serializable {
 	private String leftTravel;
 	private String note;
 
+	public CustomerDetail() {}
+	
+	public CustomerDetail(BigDecimal fee) {
+		this.fee = fee;
+	}
+	
 	public Long getCustomerId() {
 		return customerId;
 	}

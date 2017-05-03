@@ -14,12 +14,5 @@ $(document).ready(function() {
 		navsidebar.style.display = "none";
 		navoverlay.style.display = "none";
 	});
-	$(".menu-link").click(function(e) {
-		$("#ui-view").load(e.currentTarget.getAttribute("data-link"), function() {
-			$('#datatable').DataTable();
-			$("#add-new-customer").click(function() {
-				$("#div-data-customer").load('/customer/add')
-			});
-		});
-	});
+	$('#datatable').DataTable();
 });

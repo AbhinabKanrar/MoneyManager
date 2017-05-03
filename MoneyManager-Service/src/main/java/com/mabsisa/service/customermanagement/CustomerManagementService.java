@@ -14,5 +14,9 @@ import com.mabsisa.common.model.CustomerDetail;
 public interface CustomerManagementService {
 
 	List<CustomerDetail> retrieveCustomerDetail();
+	CustomerDetail save(CustomerDetail customerDetail);
+	CustomerDetail fetchByCustomerId(Long customerId);
+	CustomerDetail update(CustomerDetail customerDetail);
+	CustomerDetail delete(CustomerDetail customerDetail);
 	
 }

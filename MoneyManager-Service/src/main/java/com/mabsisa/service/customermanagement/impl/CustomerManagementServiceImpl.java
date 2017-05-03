@@ -21,13 +21,30 @@ public class CustomerManagementServiceImpl implements CustomerManagementService 
 
 	@Autowired
 	private CustomerManagementDao customerManagementDao;
+
+	@Override
+	public CustomerDetail save(CustomerDetail customerDetail) {
+		return customerManagementDao.save(customerDetail);
+	}
 	
-	/* (non-Javadoc)
-	 * @see com.mabsisa.service.customermanagement.CustomerManagementService#retrieveCustomerDetail()
-	 */
+	@Override
+	public CustomerDetail update(CustomerDetail customerDetail) {
+		return customerManagementDao.update(customerDetail);
+	}
+	
+	@Override
+	public CustomerDetail delete(CustomerDetail customerDetail) {
+		return customerManagementDao.delete(customerDetail);
+	}
+
 	@Override
 	public List<CustomerDetail> retrieveCustomerDetail() {
 		return customerManagementDao.retrieveCustomerDetail();
+	}
+	
+	@Override
+	public CustomerDetail fetchByCustomerId(Long customerId) {
+		return customerManagementDao.fetchByCustomerId(customerId);
 	}
 
 }
