@@ -63,6 +63,7 @@ public class CustomerManagementRouter {
 	public String update(@ModelAttribute("customerDetail") CustomerDetail customerDetail, Model model) {
 		if (!isValid(customerDetail)) {
 			model.addAttribute("message", "Invalid data detected");
+			model.addAttribute("status", 1);
 			model.addAttribute("customerDetail", customerDetail);
 			model.addAttribute("access", CommonUtils.getLoggedInUserAccess());
 			return "customermanagement/addcustomer";

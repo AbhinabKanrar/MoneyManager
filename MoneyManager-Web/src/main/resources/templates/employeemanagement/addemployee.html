@@ -75,7 +75,7 @@
 						<i class="w3-large fa fa-trash-o">&nbsp;&nbsp;Delete</i>
 					</button>
 				</span>
-				<input type="hidden" th:field="*{userStatusId}" required="required"/>
+				<input type="hidden" th:field="*{employeeId}" required="required"/>
 			</p>
 			<p th:if="${status} == 2">
 				<a href="/employee/view" class="w3-button w3-green">Back</a>
@@ -84,7 +84,7 @@
 				<label>User Name</label> 
 				<input class="w3-input" type="text" placeholder="Enter Username" th:field="*{username}" required="required"/>
 			</p>
-			<p>
+			<p th:if="${status} != 1 and ${status} != 2">
 				<label>Password</label> 
 				<input class="w3-input" type="password" th:field="*{password}" required="required"/>
 			</p>

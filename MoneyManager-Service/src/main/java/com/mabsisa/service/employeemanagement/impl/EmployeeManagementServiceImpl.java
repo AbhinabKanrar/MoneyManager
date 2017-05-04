@@ -32,14 +32,12 @@ public class EmployeeManagementServiceImpl implements EmployeeManagementService 
 
 	@Override
 	public Employee update(Employee employee) {
-		// TODO Auto-generated method stub
-		return null;
+		return employeeManagementDao.update(employee);
 	}
 
 	@Override
 	public Employee delete(Employee employee) {
-		// TODO Auto-generated method stub
-		return null;
+		return employeeManagementDao.delete(employee);
 	}
 
 	@Override

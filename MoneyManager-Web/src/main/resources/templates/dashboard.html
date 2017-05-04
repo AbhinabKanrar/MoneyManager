@@ -35,11 +35,11 @@
 	    </a>
 	    <a th:if="${#strings.equalsIgnoreCase(access,'ADMIN') || #strings.equalsIgnoreCase(access,'ADMIN_ASSISTANT')}" 
 	    	href="/employee/view" class="w3-bar-item w3-button w3-padding">
-	    	<i class="fa fa-eye fa-fw"></i>  Employee Management
+	    	<i class="fa fa-eye fa-building-o"></i>  Employee Management
 	    </a>
-	    <a th:if="${#strings.equalsIgnoreCase(access,'ADMIN') || #strings.equalsIgnoreCase(access,'COLLECTOR')}" 
-	    	href="#" class="w3-bar-item w3-button w3-padding">
-	    	<i class="fa fa-eye fa-fw"></i>  Money Collection
+	    <a th:if="${#strings.equalsIgnoreCase(access,'ADMIN') || #strings.equalsIgnoreCase(access,'ADMIN_ASSISTANT') || #strings.equalsIgnoreCase(access,'COLLECTOR')}" 
+	    	href="/collection/" class="w3-bar-item w3-button w3-padding">
+	    	<i class="fa fa-eye fa-usd"></i>  Money Collection
 	    </a>
 	    <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-eye fa-fw"></i>  Billing</a>
 	    <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-cog fa-fw"></i>  Settings</a><br/><br/>

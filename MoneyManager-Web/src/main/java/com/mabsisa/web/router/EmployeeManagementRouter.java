@@ -64,7 +64,7 @@ public class EmployeeManagementRouter {
 	
 	@PostMapping(value = "/addupdate", params = "action=add")
 	public String add(@ModelAttribute("employee") Employee employee, Model model) {
-		if (!isValid(employee)) {
+		if (!isValid(employee, true)) {
 			model.addAttribute("message", "Invalid data detected");
 			model.addAttribute("employee", employee);
 			model.addAttribute("roles", roles);
@@ -78,6 +78,47 @@ public class EmployeeManagementRouter {
 		} catch(Exception e) {
 			model.addAttribute("message", "Can't add employee at this moment");
 		}
+		model.addAttribute("employee", employee);
+		model.addAttribute("roles", roles);
+		model.addAttribute("userStatuses", userStatuses);
+		model.addAttribute("access", CommonUtils.getLoggedInUserAccess());
+		return "employeemanagement/addemployee";
+	}
+
+	@PostMapping(value = "/addupdate", params = "action=update")
+	public String update(@ModelAttribute("employee") Employee employee, Model model) {
+		if (!isValid(employee, false)) {
+			model.addAttribute("message", "Invalid data detected");
+			model.addAttribute("status", 1);
+			model.addAttribute("employee", employee);
+			model.addAttribute("roles", roles);
+			model.addAttribute("userStatuses", userStatuses);
+			model.addAttribute("access", CommonUtils.getLoggedInUserAccess());
+			return "employeemanagement/addemployee";
+		}
+		try {
+			employee = employeeManagementService.update(employee);
+			model.addAttribute("message", "Record updated successfully");
+		} catch(Exception e) {
+			model.addAttribute("message", "Can't update employee at this moment");
+		}
+		model.addAttribute("status", 1);
+		model.addAttribute("employee", employee);
+		model.addAttribute("roles", roles);
+		model.addAttribute("userStatuses", userStatuses);
+		model.addAttribute("access", CommonUtils.getLoggedInUserAccess());
+		return "employeemanagement/addemployee";
+	}
+
+	@PostMapping(value = "/addupdate", params = "action=delete")
+	public String delete(@ModelAttribute("employee") Employee employee, Model model) {
+		try {
+			employee = employeeManagementService.delete(employee);
+			model.addAttribute("message", "Record deleted successfully");
+		} catch(Exception e) {
+			model.addAttribute("message", "Can't delete employee at this moment");
+		}
+		model.addAttribute("status", 2);
 		model.addAttribute("employee", employee);
 		model.addAttribute("roles", roles);
 		model.addAttribute("userStatuses", userStatuses);
@@ -110,15 +151,18 @@ public class EmployeeManagementRouter {
 		model.addAttribute("roles", roles);
 		model.addAttribute("userStatuses", userStatuses);
 		model.addAttribute("status", 1);
+		model.addAttribute("employee", employee);
 		model.addAttribute("access", CommonUtils.getLoggedInUserAccess());
 		return "employeemanagement/addemployee";
 	}
 
-	private boolean isValid(Employee employee) {
+	private boolean isValid(Employee employee, boolean passwordEnabled) {
 		if (employee != null && 
 				employee.getUsername() != null &&
-				employee.getPassword() != null &&
 				employee.getRole() != null) {
+			if (passwordEnabled && employee.getPassword() != null) {
+				return true;
+			}
 			return true;
 		}
 		return false;

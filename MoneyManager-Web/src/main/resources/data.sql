@@ -22,8 +22,15 @@ CREATE TABLE IF NOT EXISTS mm.customer_details(
 	fee numeric,
 	mahal VARCHAR(20),
 	telephone VARCHAR(20),
-	left_travel char(1),
+	left_travel VARCHAR(50),
 	note VARCHAR(255)
+);
+
+CREATE TABLE IF NOT EXISTS mm.customer_payment_details(
+	customer_payment_id BIGINT PRIMARY KEY,
+	customer_id BIGINT,
+	paid char(1),
+	CONSTRAINT customer_payment_details_fk FOREIGN KEY (customer_id) REFERENCES mm.customer_details (customer_id)
 );
 
 --INSERT INTO mm.user_auth_details VALUES (2860524688118663536,'admin','$2a$10$trT3.R/Nfey62eczbKEnueTcIbJXW.u1ffAo/XfyLpofwNDbEB86O','ADMIN',null,null,'ACTIVE');
