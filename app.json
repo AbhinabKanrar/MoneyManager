@@ -1,5 +1,0 @@
-{
-  "name": "Money Manager1",
-  "description": "Money Manager1 Project deployed to Heroku.",
-  "addons": [ "heroku-postgresql" ]
-}
