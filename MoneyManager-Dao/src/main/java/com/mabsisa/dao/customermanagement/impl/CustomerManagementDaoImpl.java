@@ -56,7 +56,7 @@ public class CustomerManagementDaoImpl implements CustomerManagementDao {
 	@Transactional(isolation = Isolation.READ_COMMITTED)
 	public CustomerDetail save(CustomerDetail customerDetail) {
 		Map<String, Object> params = new HashMap<>(12);
-		customerDetail.setCustomerId(UUID.randomUUID().getMostSignificantBits());
+		customerDetail.setCustomerId(UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE);
 		params.put("customer_id", customerDetail.getCustomerId());
 		params.put("region", customerDetail.getRegion());
 		params.put("building", customerDetail.getBuilding());
@@ -73,6 +73,36 @@ public class CustomerManagementDaoImpl implements CustomerManagementDao {
 		jdbcNTemplate.update(INSERT_SQL, params);
 		
 		return customerDetail;
+	}
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	@Transactional(isolation = Isolation.READ_COMMITTED)
+	public void save(List<CustomerDetail> customerDetails) {
+		int counter = 0;
+		Map<String, Object>[] params = new Map[customerDetails.size()];
+		
+		for (CustomerDetail customerDetail : customerDetails) {
+			Map<String, Object> param = new HashMap<>(12);
+			customerDetail.setCustomerId(UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE);
+			param.put("customer_id", customerDetail.getCustomerId());
+			param.put("region", customerDetail.getRegion());
+			param.put("building", customerDetail.getBuilding());
+			param.put("address", customerDetail.getAddress());
+			param.put("client", customerDetail.getClient());
+			param.put("name", customerDetail.getName());
+			param.put("floor", customerDetail.getFloor());
+			param.put("fee", customerDetail.getFee());
+			param.put("mahal", customerDetail.getMahal());
+			param.put("telephone", customerDetail.getTelephone());
+			param.put("left_travel", customerDetail.getLeftTravel());
+			param.put("note", customerDetail.getNote());
+			params[counter] = param;
+			counter++;
+		}
+		
+		jdbcNTemplate.batchUpdate(INSERT_SQL, params);
+		
 	}
 
 	@Override

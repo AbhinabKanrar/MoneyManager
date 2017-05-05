@@ -3,6 +3,7 @@
  */
 package com.mabsisa.web.router;
 
+import java.io.File;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.mabsisa.common.model.CustomerDetail;
 import com.mabsisa.common.utils.CommonUtils;
@@ -32,6 +35,8 @@ public class CustomerManagementRouter {
 	@Autowired
 	private CustomerManagementService customerManagementService;
 
+	private static final String fileExtentions = ".xlsx";
+	
 	@GetMapping("/add")
 	public String add(Model model) {
 		CustomerDetail customerDetail = new CustomerDetail(new BigDecimal("0.00"));
@@ -40,6 +45,32 @@ public class CustomerManagementRouter {
 		return "customermanagement/addcustomer";
 	}
 
+	@GetMapping("/add/excel")
+	public String addExcel(Model model) {
+		model.addAttribute("access", CommonUtils.getLoggedInUserAccess());
+		return "customermanagement/addcustomerexcel";
+	}
+	
+	@PostMapping("/customerexcelupload")
+	public String customerexcelupload(@RequestParam MultipartFile excel, Model model) {
+		if (!isValidExcel(excel)) {
+			model.addAttribute("message", "Invalid file");
+			model.addAttribute("access", CommonUtils.getLoggedInUserAccess());
+			return "customermanagement/addcustomerexcel";
+		}
+		try {
+			String destination = "/tmp/"+ excel.getOriginalFilename();
+			File file = new File(destination);
+			excel.transferTo(file);
+			customerManagementService.save(file);
+		} catch (Exception e) {
+			e.printStackTrace();
+			model.addAttribute("message", "Unable to save the data at this moment");
+		}
+		model.addAttribute("access", CommonUtils.getLoggedInUserAccess());
+		return "customermanagement/addcustomerexcel";
+	}
+	
 	@PostMapping(value = "/addupdate", params = "action=add")
 	public String add(@ModelAttribute("customerDetail") CustomerDetail customerDetail, Model model) {
 		if (!isValid(customerDetail)) {
@@ -126,6 +157,19 @@ public class CustomerManagementRouter {
 		if (customerDetail != null && customerDetail.getRegion() != null && customerDetail.getAddress() != null
 				&& Pattern.matches("[0-9]+(\\.){0,1}[0-9]*", String.valueOf(customerDetail.getFee()))) {
 			return true;
+		}
+		return false;
+	}
+
+	private boolean isValidExcel(MultipartFile excel) {
+		if (excel != null) {
+			String fileName = excel.getOriginalFilename();
+			if (fileName != null && !fileName.isEmpty()) {
+				int lastIndex = fileName.lastIndexOf('.');
+				if (fileName.substring(lastIndex, fileName.length()).equalsIgnoreCase(fileExtentions)) {
+					return true;
+				}
+			}
 		}
 		return false;
 	}

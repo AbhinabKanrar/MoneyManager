@@ -39,11 +39,11 @@
 		    	<i class="fa fa-users fa-fw"></i>  Customer Management
 		    </a>
 		    <a th:if="${#strings.equalsIgnoreCase(access,'ADMIN') || #strings.equalsIgnoreCase(access,'ADMIN_ASSISTANT')}" 
-		    	href="/employee/view" class="w3-bar-item w3-button w3-padding w3-blue">
+		    	href="/employee/view" class="w3-bar-item w3-button w3-padding">
 		    	<i class="fa fa-eye fa-fw"></i>  Employee Management
 		    </a>
 		    <a th:if="${#strings.equalsIgnoreCase(access,'ADMIN') || #strings.equalsIgnoreCase(access,'COLLECTOR')}" 
-		    	href="#" class="w3-bar-item w3-button w3-padding">
+		    	href="/collection/view" class="w3-bar-item w3-button w3-padding w3-blue">
 		    	<i class="fa fa-eye fa-fw"></i>  Money Collection
 		    </a>
 		    <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-eye fa-fw"></i>  Billing</a>
@@ -55,11 +55,11 @@
 		title="close side menu" id="navoverlay"></div>
 	<div class="w3-main" id="ui-view">
 		<div class="w3-container w3-bottombar w3-blue w3-xlarge">
-			<i class="fa fa-users fa-fw"></i> Employee Management
+			<i class="fa fa-users fa-fw"></i> Money Collection
 		</div>
 		<div class="w3-container">
 			<p>
-				<a href="/employee/add" class="w3-button w3-green">Add New Employee</a>
+				<a href="/customer/add" class="w3-button w3-green">Add New Collection</a>
 			</p>
 		</div>
 		<div class="w3-responsive" id="div-data-customer">
@@ -67,24 +67,22 @@
 				cellspacing="0" width="100%">
 				<thead>
 					<tr>
-						<th>Employee ID</th>
-						<th>Username</th>
-						<th>Role</th>
-						<th>Mail</th>
-						<th>Phone Number</th>
-						<th>User Status</th>
+						<th>Customer ID</th>
+						<th>Collector ID</th>
+						<th>Requested Payement Amount</th>
+						<th>Actual Payment Amount</th>
+						<th>Paid</th>
 						<th>Action</th>
 					</tr>
-				</thead>
+				</thead> 
 				<tbody>
-					<tr th:each="employee : ${employees}">
-						<td th:text="${employee.employeeId}"></td>
-						<td th:text="${employee.username}"></td>
-						<td th:text="${employee.role}"></td>
-						<td th:text="${employee.mail}"></td>
-						<td th:text="${employee.phoneNumber}"></td>
-						<td th:text="${employee.userStatus}"></td>
-						<td><a th:href="@{|/employee/update/${employee.employeeId}|}" class="w3-button w3-green">Edit</a></td>
+					<tr th:each="collectionDetail : ${collectionDetails}">
+						<td th:text="${collectionDetail.customerId}"></td>
+						<td th:text="${collectionDetail.userId}"></td>
+						<td th:text="${collectionDetail.requestedPayementAmount}"></td>
+						<td th:text="${collectionDetail.actualPayementAmount}"></td>
+						<td th:text="${collectionDetail.paid}"></td>
+						<td><a th:href="@{|/collection/view/${collectionDetail.customerPaymentId}|}" class="w3-button w3-green">View</a></td>
 					</tr>
 				</tbody>
 			</table>

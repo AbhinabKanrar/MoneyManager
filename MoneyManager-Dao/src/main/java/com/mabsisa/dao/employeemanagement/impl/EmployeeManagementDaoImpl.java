@@ -57,7 +57,7 @@ public class EmployeeManagementDaoImpl implements EmployeeManagementDao {
 	@Transactional(isolation = Isolation.READ_COMMITTED)
 	public Employee save(Employee employee) {
 		Map<String, Object> params = new HashMap<>(7);
-		employee.setEmployeeId(UUID.randomUUID().getMostSignificantBits());
+		employee.setEmployeeId(UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE);
 		params.put("user_id", employee.getEmployeeId());
 		params.put("username", employee.getUsername());
 		params.put("password", employee.getPassword());

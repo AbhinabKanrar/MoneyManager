@@ -30,16 +30,16 @@
 	  <div class="w3-bar-block">
 	    <a href="#" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black nav-menu-button-close" title="close menu"><i class="fa fa-remove fa-fw"></i>  Close Menu</a>
 	    <a th:if="${#strings.equalsIgnoreCase(access,'ADMIN') || #strings.equalsIgnoreCase(access,'ADMIN_ASSISTANT')}" 
-	    	href="/customer/view" class="w3-bar-item w3-button w3-padding">
+	    	href="/customer/view" class="w3-bar-item w3-button w3-padding w3-blue">
 	    	<i class="fa fa-users fa-fw"></i>  Customer Management
 	    </a>
 	    <a th:if="${#strings.equalsIgnoreCase(access,'ADMIN') || #strings.equalsIgnoreCase(access,'ADMIN_ASSISTANT')}" 
 	    	href="/employee/view" class="w3-bar-item w3-button w3-padding">
-	    	<i class="fa fa-eye fa-building-o"></i>  Employee Management
+	    	<i class="fa fa-eye fa-fw"></i>  Employee Management
 	    </a>
-	    <a th:if="${#strings.equalsIgnoreCase(access,'ADMIN') || #strings.equalsIgnoreCase(access,'ADMIN_ASSISTANT') || #strings.equalsIgnoreCase(access,'COLLECTOR')}" 
-	    	href="/collection/view" class="w3-bar-item w3-button w3-padding">
-	    	<i class="fa fa-eye fa-usd"></i>  Money Collection
+	    <a th:if="${#strings.equalsIgnoreCase(access,'ADMIN') || #strings.equalsIgnoreCase(access,'COLLECTOR')}" 
+	    	href="#" class="w3-bar-item w3-button w3-padding">
+	    	<i class="fa fa-eye fa-fw"></i>  Money Collection
 	    </a>
 	    <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-eye fa-fw"></i>  Billing</a>
 	    <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-cog fa-fw"></i>  Settings</a><br/><br/>
@@ -47,7 +47,28 @@
 	</nav>
 	<div class="w3-overlay w3-hide-large nav-menu-close nav-menu-button-close" title="close side menu" id="navoverlay"></div>
 	<div class="w3-main" id="ui-view">
-		HELLO WORLD
+		<div class="w3-container w3-bottombar w3-blue w3-xlarge">
+			<i class="fa fa-users fa-fw"></i> Customer Management
+		</div>
+		<div class="w3-container">
+			Upload The Excel
+		</div>
+		<div class="w3-pale-green" th:text="${message}"></div>
+		<div class="w3-container">
+			<form action="/customer/customerexcelupload" method="post" enctype="multipart/form-data">
+				<input type="file" name="excel"/>
+				<input type="hidden" th:name="${_csrf.parameterName}"
+					th:value="${_csrf.token}" />
+				<button class="w3-button w3-theme" type="submit">
+					<i class="w3-large fa fa-sign-in">&nbsp;&nbsp;Upload</i>
+				</button>
+			</form>
+		</div>
+		<div class="w3-container">
+			<p>
+				<a href="/Customer Info v3.xlsx">Download Sample Excel</a>
+			</p>
+		</div>
 	</div>
 	<script src="/js/lib/jquery.min.js"></script>
 	<script src="/js/lib/jquery.dataTables.min.js"></script>

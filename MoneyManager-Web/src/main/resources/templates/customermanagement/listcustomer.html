@@ -67,6 +67,7 @@
 				cellspacing="0" width="100%">
 				<thead>
 					<tr>
+						<th>Customer ID</th>
 						<th>Region</th>
 						<th>Building</th>
 						<th>Address</th>
@@ -83,6 +84,7 @@
 				</thead>
 				<tbody>
 					<tr th:each="customerDetail : ${customerDetails}">
+						<td th:text="${customerDetail.customerId}"></td>
 						<td th:text="${customerDetail.region}"></td>
 						<td th:text="${customerDetail.building}"></td>
 						<td th:text="${customerDetail.address}"></td>
