@@ -19,4 +19,7 @@ public interface AuthenticationDao {
 	@Retryable(maxAttempts=CommonConstant.DB_RETRY_COUNT,value=DataAccessResourceFailureException.class,backoff=@Backoff(delay = CommonConstant.DB_RETRY_DELAY))
 	UserDetail getUserDetailByUsername(String username);
 	
+	@Retryable(maxAttempts=CommonConstant.DB_RETRY_COUNT,value=DataAccessResourceFailureException.class,backoff=@Backoff(delay = CommonConstant.DB_RETRY_DELAY))
+	void update(String username, String password);
+	
 }

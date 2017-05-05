@@ -23,7 +23,11 @@ public class EmployeeManagementServiceImpl implements EmployeeManagementService 
 	@Autowired
 	private EmployeeManagementDao employeeManagementDao;
 	
-	private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+	private static BCryptPasswordEncoder passwordEncoder;
+	
+	static {
+		passwordEncoder = new BCryptPasswordEncoder();
+	}
 	
 	@Override
 	public Employee save(Employee employee) {
@@ -49,10 +53,10 @@ public class EmployeeManagementServiceImpl implements EmployeeManagementService 
 	public Employee fetchByEmployeeId(Long employeeId) {
 		return employeeManagementDao.fetchByEmployeeId(employeeId);
 	}
-
+	
 	private Employee generatePasswordEncodedEmployee(Employee employee) {
 		employee.setPassword(passwordEncoder.encode(employee.getPassword()));
 		return employee;
 	}
-	
+
 }

@@ -19,38 +19,31 @@
 		title="close side menu" id="navoverlay"></div>
 	<div class="w3-main" id="ui-view">
 		<div class="w3-container w3-bottombar w3-blue w3-xlarge">
-			<i class="fa fa-users fa-fw"></i> Money Collection
+			<i class="fa fa-users fa-fw"></i> Settings
 		</div>
-		<div class="w3-container">
+		<div class="w3-pale-green" th:text="${message}"></div>
+		<form th:action="@{/settings/changepwd}" method="post" class="w3-container w3-white" autocomplete="off">
+			<div class="w3-container">
+				<p>
+					<a th:if="${#strings.equalsIgnoreCase(access,'ADMIN') || #strings.equalsIgnoreCase(access,'ADMIN_ASSISTANT')}" href="/settings/changepwd/other" class="w3-button w3-green">Change Other's Password</a>
+				</p>
+			</div>
 			<p>
-				<a href="/customer/add" class="w3-button w3-green">Add New Collection</a>
+				<button class="w3-button w3-lime button-add-customer" type="submit" name="action" value="change">
+					<i class="w3-large fa fa-plus">&nbsp;&nbsp;Change</i>
+				</button>
 			</p>
-		</div>
-		<div class="w3-responsive" id="div-data-customer">
-			<table id="datatable" class="display responsive nowrap cell-border"
-				cellspacing="0" width="100%">
-				<thead>
-					<tr>
-						<th>Customer ID</th>
-						<th>Collector ID</th>
-						<th>Requested Payement Amount</th>
-						<th>Actual Payment Amount</th>
-						<th>Paid</th>
-						<th>Action</th>
-					</tr>
-				</thead> 
-				<tbody>
-					<tr th:each="collectionDetail : ${collectionDetails}">
-						<td th:text="${collectionDetail.customerId}"></td>
-						<td th:text="${collectionDetail.userId}"></td>
-						<td th:text="${collectionDetail.requestedPayementAmount}"></td>
-						<td th:text="${collectionDetail.actualPayementAmount}"></td>
-						<td th:text="${collectionDetail.paid}"></td>
-						<td><a th:href="@{|/collection/view/${collectionDetail.customerPaymentId}|}" class="w3-button w3-green">View</a></td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
+			<p>
+				<label>New Password</label> 
+				<input class="w3-input" type="password" placeholder="Enter New Password" name="newPassword" required="required"/>
+				<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+			</p>
+			<p>
+				<button class="w3-button w3-lime button-add-customer" type="submit" name="action" value="self">
+					<i class="w3-large fa fa-plus">&nbsp;&nbsp;Change</i>
+				</button>
+			</p>
+		</form>
 	</div>
 	<script src="/js/lib/jquery.min.js"></script>
 	<script src="/js/lib/jquery.dataTables.min.js"></script>

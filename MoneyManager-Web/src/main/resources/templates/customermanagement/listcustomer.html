@@ -2,57 +2,18 @@
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!-->
-<html class="no-js" xmlns:th="http://www.thymeleaf.org">
-<!--<![endif]-->
-<head>
-<meta charset="UTF-8" />
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Money Manager</title>
-<link rel="stylesheet" href="/css/lib/w3.css" />
-<link rel="stylesheet" href="/css/lib/font-awesome.min.css" />
-<link rel="stylesheet" href="/css/lib/jquery.dataTables.min.css" />
-<link rel="stylesheet" href="/css/lib/responsive.dataTables.min.css" />
-<link rel="stylesheet" href="/css/app.css" />
-</head>
+<!--[if gt IE 8]><!--> <html class="no-js" xmlns:th="http://www.thymeleaf.org"> <!--<![endif]-->
+<head th:include="fragments/header"/>
 <body>
-	<div class="w3-bar w3-top w3-theme w3-large header">
-		<button class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey" id="nav-menu-button">
-			<i class="fa fa-bars"></i>
-		</button>
-		<span class="w3-bar-item w3-left">Money Manager</span> 
-		<a href="/logout">
-			<span class="w3-bar-item w3-right"><i class="fa fa-history"></i></span>
-		</a>
-	</div>
-	<nav class="w3-sidebar w3-collapse w3-white nav-menu" id="navsidebar">
-		<br/>
-		<hr/>
-		<div class="w3-container">
-			<h5>Dashboard</h5>
-		</div>
-		<div class="w3-bar-block">
-		    <a href="#" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black nav-menu-button-close" title="close menu"><i class="fa fa-remove fa-fw"></i>  Close Menu</a>
-		    <a th:if="${#strings.equalsIgnoreCase(access,'ADMIN') || #strings.equalsIgnoreCase(access,'ADMIN_ASSISTANT')}" 
-		    	href="/customer/view" class="w3-bar-item w3-button w3-padding w3-blue">
-		    	<i class="fa fa-users fa-fw"></i>  Customer Management
-		    </a>
-		    <a th:if="${#strings.equalsIgnoreCase(access,'ADMIN') || #strings.equalsIgnoreCase(access,'ADMIN_ASSISTANT')}" 
-		    	href="/employee/view" class="w3-bar-item w3-button w3-padding">
-		    	<i class="fa fa-eye fa-fw"></i>  Employee Management
-		    </a>
-		    <a th:if="${#strings.equalsIgnoreCase(access,'ADMIN') || #strings.equalsIgnoreCase(access,'COLLECTOR')}" 
-		    	href="#" class="w3-bar-item w3-button w3-padding">
-		    	<i class="fa fa-eye fa-fw"></i>  Money Collection
-		    </a>
-		    <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-eye fa-fw"></i>  Billing</a>
-		    <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-cog fa-fw"></i>  Settings</a><br/><br/>
-		</div>
+	<div class="w3-bar w3-top w3-theme w3-large header" th:include="fragments/top"/>
+	<nav class="w3-sidebar w3-collapse w3-white nav-menu" id="navsidebar"><br/>
+	  <hr/>
+	  <div class="w3-container">
+	    <h5>Dashboard</h5>
+	  </div>
+	  <div class="w3-bar-block" th:include="fragments/menu"/>
 	</nav>
-	<div
-		class="w3-overlay w3-hide-large nav-menu-close nav-menu-button-close"
-		title="close side menu" id="navoverlay"></div>
+	<div class="w3-overlay w3-hide-large nav-menu-close nav-menu-button-close" title="close side menu" id="navoverlay"></div>
 	<div class="w3-main" id="ui-view">
 		<div class="w3-container w3-bottombar w3-blue w3-xlarge">
 			<i class="fa fa-users fa-fw"></i> Customer Management

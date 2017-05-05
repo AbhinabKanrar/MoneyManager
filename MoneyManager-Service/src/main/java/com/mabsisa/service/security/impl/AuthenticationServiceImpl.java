@@ -4,6 +4,7 @@
 package com.mabsisa.service.security.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.mabsisa.common.model.UserDetail;
@@ -20,12 +21,20 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 	@Autowired
 	private AuthenticationDao authenticationDao; 
 
-	/* (non-Javadoc)
-	 * @see com.mabsisa.service.security.AuthenticationService#getUserDetailByUsername(java.lang.String)
-	 */
+	private static BCryptPasswordEncoder passwordEncoder;
+	
+	static {
+		passwordEncoder = new BCryptPasswordEncoder();
+	}
+	
 	@Override
 	public UserDetail getUserDetailByUsername(String username) {
 		return authenticationDao.getUserDetailByUsername(username);
+	}
+
+	@Override
+	public void update(String username, String password) {
+		authenticationDao.update(username, passwordEncoder.encode(password));
 	}
 
 }

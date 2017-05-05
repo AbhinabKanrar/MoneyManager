@@ -12,5 +12,6 @@ import com.mabsisa.common.model.UserDetail;
 public interface AuthenticationService {
 
 	UserDetail getUserDetailByUsername(String username);
+	void update(String username, String password);
 	
 }
