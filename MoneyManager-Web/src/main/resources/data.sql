@@ -23,7 +23,9 @@ CREATE TABLE IF NOT EXISTS mm.customer_details(
 	mahal VARCHAR(20),
 	telephone VARCHAR(20),
 	left_travel VARCHAR(50),
-	note VARCHAR(255)
+	collector_id BIGINT,
+	note VARCHAR(255),
+	CONSTRAINT customer_details_collector_id_fk_ FOREIGN KEY (collector_id) REFERENCES mm.user_auth_details (user_id)
 );
 
 CREATE TABLE IF NOT EXISTS mm.collection_details(

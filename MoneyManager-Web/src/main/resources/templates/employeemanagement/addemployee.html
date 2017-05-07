@@ -18,8 +18,12 @@
 		<div class="w3-container w3-bottombar w3-blue w3-xlarge">
 			<i class="fa fa-users fa-fw"></i> Employee Management
 		</div>
-		<div class="w3-pale-green" th:text="${message}"></div>
+		<div class="w3-input w3-large">
+			<b>Add Employee</b>
+		</div>
 		<form th:action="@{/employee/addupdate}" method="post" th:object="${employee}" class="w3-container w3-white" autocomplete="off">
+			<p class="success" th:text="${successMessage}"></p>
+			<p class="error" th:text="${errMessage}"></p>
 			<p th:if="${status} != 1 and ${status} != 2">
 				<span>
 					<button class="w3-button w3-lime button-add-customer" type="submit" name="action" value="add">

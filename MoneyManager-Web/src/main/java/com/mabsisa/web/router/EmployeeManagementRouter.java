@@ -65,7 +65,7 @@ public class EmployeeManagementRouter {
 	@PostMapping(value = "/addupdate", params = "action=add")
 	public String add(@ModelAttribute("employee") Employee employee, Model model) {
 		if (!isValid(employee, true)) {
-			model.addAttribute("message", "Invalid data detected");
+			model.addAttribute("errMessage", "Invalid data detected");
 			model.addAttribute("employee", employee);
 			model.addAttribute("roles", roles);
 			model.addAttribute("userStatuses", userStatuses);
@@ -74,9 +74,9 @@ public class EmployeeManagementRouter {
 		}
 		try {
 			employee = employeeManagementService.save(employee);
-			model.addAttribute("message", "Record added successfully");
+			model.addAttribute("successMessage", "Record added successfully");
 		} catch(Exception e) {
-			model.addAttribute("message", "Can't add employee at this moment");
+			model.addAttribute("errMessage", "Can't add employee at this moment");
 		}
 		model.addAttribute("employee", employee);
 		model.addAttribute("roles", roles);
@@ -88,7 +88,7 @@ public class EmployeeManagementRouter {
 	@PostMapping(value = "/addupdate", params = "action=update")
 	public String update(@ModelAttribute("employee") Employee employee, Model model) {
 		if (!isValid(employee, false)) {
-			model.addAttribute("message", "Invalid data detected");
+			model.addAttribute("errMessage", "Invalid data detected");
 			model.addAttribute("status", 1);
 			model.addAttribute("employee", employee);
 			model.addAttribute("roles", roles);
@@ -98,9 +98,9 @@ public class EmployeeManagementRouter {
 		}
 		try {
 			employee = employeeManagementService.update(employee);
-			model.addAttribute("message", "Record updated successfully");
+			model.addAttribute("successMessage", "Record updated successfully");
 		} catch(Exception e) {
-			model.addAttribute("message", "Can't update employee at this moment");
+			model.addAttribute("errMessage", "Can't update employee at this moment");
 		}
 		model.addAttribute("status", 1);
 		model.addAttribute("employee", employee);
@@ -114,9 +114,9 @@ public class EmployeeManagementRouter {
 	public String delete(@ModelAttribute("employee") Employee employee, Model model) {
 		try {
 			employee = employeeManagementService.delete(employee);
-			model.addAttribute("message", "Record deleted successfully");
+			model.addAttribute("successMessage", "Record deleted successfully");
 		} catch(Exception e) {
-			model.addAttribute("message", "Can't delete employee at this moment");
+			model.addAttribute("errMessage", "Can't delete employee at this moment");
 		}
 		model.addAttribute("status", 2);
 		model.addAttribute("employee", employee);
@@ -133,6 +133,7 @@ public class EmployeeManagementRouter {
 			employees = employeeManagementService.retrieveEmployee();
 		} catch(Exception e) {
 			e.printStackTrace();
+			model.addAttribute("errMessage", "Unable to fetch the data at this moment");
 		}
 		model.addAttribute("employees", employees);
 		model.addAttribute("access", CommonUtils.getLoggedInUserAccess());
@@ -145,7 +146,7 @@ public class EmployeeManagementRouter {
 		try {
 			employee = employeeManagementService.fetchByEmployeeId(Long.valueOf(employeeId));
 		} catch(Exception e) {
-			model.addAttribute("message", "No data found");
+			model.addAttribute("errMessage", "No data found");
 			employee = new Employee();
 		}
 		model.addAttribute("roles", roles);

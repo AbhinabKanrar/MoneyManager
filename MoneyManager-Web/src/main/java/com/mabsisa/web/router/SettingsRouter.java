@@ -43,9 +43,9 @@ public class SettingsRouter {
 			String username = principal.getName();
 			authenticationService.update(username, newPassword);
 		} catch (ServletRequestBindingException e) {
-			model.addAttribute("message", "Invalid password");
+			model.addAttribute("errMessage", "Unable to change password at this moment");
 		}
-		model.addAttribute("message", "Password chnaged successfully");
+		model.addAttribute("successMessage", "Password chnaged successfully");
 		model.addAttribute("access", CommonUtils.getLoggedInUserAccess());
 		return "settings/settings";
 	}

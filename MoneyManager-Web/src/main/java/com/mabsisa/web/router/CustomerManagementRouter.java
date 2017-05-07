@@ -10,6 +10,9 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,8 +21,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mabsisa.common.model.CustomerDetail;
 import com.mabsisa.common.utils.CommonUtils;
 import com.mabsisa.service.customermanagement.CustomerManagementService;
@@ -31,6 +37,8 @@ import com.mabsisa.service.customermanagement.CustomerManagementService;
 @Controller
 @RequestMapping("/customer")
 public class CustomerManagementRouter {
+	
+	private static ObjectMapper mapper = new ObjectMapper();
 
 	@Autowired
 	private CustomerManagementService customerManagementService;
@@ -54,7 +62,7 @@ public class CustomerManagementRouter {
 	@PostMapping("/customerexcelupload")
 	public String customerexcelupload(@RequestParam MultipartFile excel, Model model) {
 		if (!isValidExcel(excel)) {
-			model.addAttribute("message", "Invalid file");
+			model.addAttribute("errMessage", "Invalid file format");
 			model.addAttribute("access", CommonUtils.getLoggedInUserAccess());
 			return "customermanagement/addcustomerexcel";
 		}
@@ -65,8 +73,9 @@ public class CustomerManagementRouter {
 			customerManagementService.save(file);
 		} catch (Exception e) {
 			e.printStackTrace();
-			model.addAttribute("message", "Unable to save the data at this moment");
+			model.addAttribute("errMessage", "Unable to save the data at this moment");
 		}
+		model.addAttribute("successMessage", "Customer details uploaded successfully");
 		model.addAttribute("access", CommonUtils.getLoggedInUserAccess());
 		return "customermanagement/addcustomerexcel";
 	}
@@ -74,16 +83,16 @@ public class CustomerManagementRouter {
 	@PostMapping(value = "/addupdate", params = "action=add")
 	public String add(@ModelAttribute("customerDetail") CustomerDetail customerDetail, Model model) {
 		if (!isValid(customerDetail)) {
-			model.addAttribute("message", "Invalid data detected");
+			model.addAttribute("errMessage", "Invalid data detected");
 			model.addAttribute("customerDetail", customerDetail);
 			model.addAttribute("access", CommonUtils.getLoggedInUserAccess());
 			return "customermanagement/addcustomer";
 		}
 		try {
 			customerDetail = customerManagementService.save(customerDetail);
-			model.addAttribute("message", "Record added successfully");
+			model.addAttribute("successMessage", "Record added successfully");
 		} catch (Exception e) {
-			model.addAttribute("message", "Can't add customer at this moment");
+			model.addAttribute("errMessage", "Can't add customer at this moment");
 		}
 		model.addAttribute("customerDetail", customerDetail);
 		model.addAttribute("access", CommonUtils.getLoggedInUserAccess());
@@ -93,7 +102,7 @@ public class CustomerManagementRouter {
 	@PostMapping(value = "/addupdate", params = "action=update")
 	public String update(@ModelAttribute("customerDetail") CustomerDetail customerDetail, Model model) {
 		if (!isValid(customerDetail)) {
-			model.addAttribute("message", "Invalid data detected");
+			model.addAttribute("errMessage", "Invalid data detected");
 			model.addAttribute("status", 1);
 			model.addAttribute("customerDetail", customerDetail);
 			model.addAttribute("access", CommonUtils.getLoggedInUserAccess());
@@ -101,9 +110,9 @@ public class CustomerManagementRouter {
 		}
 		try {
 			customerDetail = customerManagementService.update(customerDetail);
-			model.addAttribute("message", "Record updated successfully");
+			model.addAttribute("successMessage", "Record updated successfully");
 		} catch (Exception e) {
-			model.addAttribute("message", "Can't update customer at this moment");
+			model.addAttribute("errMessage", "Can't update customer at this moment");
 		}
 		model.addAttribute("status", 1);
 		model.addAttribute("customerDetail", customerDetail);
@@ -115,9 +124,9 @@ public class CustomerManagementRouter {
 	public String delete(@ModelAttribute("customerDetail") CustomerDetail customerDetail, Model model) {
 		try {
 			customerDetail = customerManagementService.delete(customerDetail);
-			model.addAttribute("message", "Record deleted successfully");
+			model.addAttribute("successMessage", "Record deleted successfully");
 		} catch (Exception e) {
-			model.addAttribute("message", "Can't delete customer at this moment");
+			model.addAttribute("errMessage", "Can't delete customer at this moment");
 		}
 		model.addAttribute("status", 2);
 		model.addAttribute("customerDetail", customerDetail);
@@ -132,6 +141,7 @@ public class CustomerManagementRouter {
 			customerDetails = customerManagementService.retrieveCustomerDetail();
 		} catch (Exception e) {
 			e.printStackTrace();
+			model.addAttribute("errMessage", "Unable to fetch the data at this moment");
 		}
 		model.addAttribute("customerDetails", customerDetails);
 		model.addAttribute("access", CommonUtils.getLoggedInUserAccess());
@@ -144,7 +154,7 @@ public class CustomerManagementRouter {
 		try {
 			customerDetail = customerManagementService.fetchByCustomerId(Long.valueOf(customerId));
 		} catch (Exception e) {
-			model.addAttribute("message", "No data found");
+			model.addAttribute("errMessage", "No data found");
 			customerDetail = new CustomerDetail(new BigDecimal("0.00"));
 		}
 		model.addAttribute("status", 1);

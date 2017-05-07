@@ -28,10 +28,19 @@ public interface CustomerManagementDao {
 	CustomerDetail update(CustomerDetail customerDetail);
 	
 	@Retryable(maxAttempts=CommonConstant.DB_RETRY_COUNT,value=DataAccessResourceFailureException.class,backoff=@Backoff(delay = CommonConstant.DB_RETRY_DELAY))
+	CustomerDetail updateWithCollector(CustomerDetail customerDetail);
+	
+	@Retryable(maxAttempts=CommonConstant.DB_RETRY_COUNT,value=DataAccessResourceFailureException.class,backoff=@Backoff(delay = CommonConstant.DB_RETRY_DELAY))
 	CustomerDetail delete(CustomerDetail customerDetail);
 	
 	@Retryable(maxAttempts=CommonConstant.DB_RETRY_COUNT,value=DataAccessResourceFailureException.class,backoff=@Backoff(delay = CommonConstant.DB_RETRY_DELAY))
 	List<CustomerDetail> retrieveCustomerDetail();
+	
+	@Retryable(maxAttempts=CommonConstant.DB_RETRY_COUNT,value=DataAccessResourceFailureException.class,backoff=@Backoff(delay = CommonConstant.DB_RETRY_DELAY))
+	List<CustomerDetail> fetchByRegion();
+	
+	@Retryable(maxAttempts=CommonConstant.DB_RETRY_COUNT,value=DataAccessResourceFailureException.class,backoff=@Backoff(delay = CommonConstant.DB_RETRY_DELAY))
+	List<CustomerDetail> fetchByBuilding(String region);
 	
 	@Retryable(maxAttempts=CommonConstant.DB_RETRY_COUNT,value=DataAccessResourceFailureException.class,backoff=@Backoff(delay = CommonConstant.DB_RETRY_DELAY))
 	CustomerDetail fetchByCustomerId(Long customerId);

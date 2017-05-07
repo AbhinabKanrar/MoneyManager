@@ -21,7 +21,8 @@
 		<div class="w3-container w3-bottombar w3-blue w3-xlarge">
 			<i class="fa fa-users fa-fw"></i> Settings
 		</div>
-		<div class="w3-pale-green" th:text="${message}"></div>
+		<p class="success" th:text="${successMessage}"></p>
+		<p class="error" th:text="${errMessage}"></p>
 		<form th:action="@{/settings/changepwd}" method="post" class="w3-container w3-white" autocomplete="off">
 			<div class="w3-container">
 				<p>

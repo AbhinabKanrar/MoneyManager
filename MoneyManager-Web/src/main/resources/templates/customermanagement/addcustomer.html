@@ -18,7 +18,11 @@
 		<div class="w3-container w3-bottombar w3-blue w3-xlarge">
 			<i class="fa fa-users fa-fw"></i> Customer Management
 		</div>
-		<div class="w3-pale-green" th:text="${message}"></div>
+		<div class="w3-input w3-large">
+			<b>Add Customer</b>
+		</div>
+		<p class="success" th:text="${successMessage}"></p>
+		<p class="error" th:text="${errMessage}"></p>
 		<form th:action="@{/customer/addupdate}" method="post" th:object="${customerDetail}" class="w3-container w3-white" autocomplete="off">
 			<p th:if="${status} != 1 and ${status} != 2">
 				<span>

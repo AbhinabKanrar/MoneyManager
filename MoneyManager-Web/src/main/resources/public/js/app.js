@@ -14,5 +14,22 @@ $(document).ready(function() {
 		navsidebar.style.display = "none";
 		navoverlay.style.display = "none";
 	});
-	$('#datatable').DataTable();
+	$('#datatable').DataTable({
+		paging : false
+	});
+	$("#customer-region").change(function() {
+		$.ajax({
+			  url: "/customer/byregion/"+$("#customer-region option:selected").text(),
+			  method: "post",
+			  dataType: "json",
+			  beforeSend: function(request) {
+				    request.setRequestHeader("X-CSRF-TOKEN", $('input[name=_csrf]').val());
+			  }
+			}).done(function(data) {
+				console.log(data)
+				alert(data)
+			}).fail(function(err) {
+				console.log(err)
+			});
+	});
 });
