@@ -41,7 +41,8 @@ public class AuthFailureHandler implements AuthenticationFailureHandler {
 
 	protected void handle(HttpServletRequest request, HttpServletResponse response,
 			AuthenticationException authenticationException) throws IOException {
-		redirectStrategy.sendRedirect(request, response, CommonConstant.URL_LOGIN_ERROR);
+//		redirectStrategy.sendRedirect(request, response, CommonConstant.URL_LOGIN_ERROR);
+		response.sendRedirect(CommonConstant.URL_LOGIN_ERROR);
 	}
 
 }

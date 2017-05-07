@@ -3,18 +3,23 @@
  */
 package com.mabsisa.web.router;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.ServletRequestBindingException;
+import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.mabsisa.common.model.CollectionDetail;
 import com.mabsisa.common.model.CustomerDetail;
 import com.mabsisa.common.model.Employee;
 import com.mabsisa.common.utils.CommonUtils;
@@ -41,17 +46,27 @@ public class CollectionManagementRouter {
 	
 	@GetMapping("/view")
 	public String view(Model model) {
-//		List<CollectionDetail> collectionDetails = new ArrayList<CollectionDetail>();
-//		try {
-//			collectionDetails = collectionManagementService.retrieveCollectionDetails();
-//		} catch(Exception e) {
-//			e.printStackTrace();
-//		}
-//		model.addAttribute("collectionDetails", collectionDetails);
 		model.addAttribute("access", CommonUtils.getLoggedInUserAccess());
 		return "collectionmanagement/collectiondashboard";
 	}
 	
+	@GetMapping("/assignment/view/{customerId}")
+	public String assignmentViewById(@PathVariable("customerId") String customerId, Model model) {
+		CustomerDetail customerDetail = null;
+		List<Employee> employees = new ArrayList<Employee>();
+		try {
+			customerDetail = customerManagementService.fetchByCustomerId(Long.valueOf(customerId));
+			employees = employeeManagementService.retrieveEmployee();
+		} catch (Exception e) {
+			e.printStackTrace();
+			model.addAttribute("errMessage", "Unable to fetch the data at this moment");
+		}
+		model.addAttribute("customerDetail", customerDetail);
+		model.addAttribute("employees", employees);
+		model.addAttribute("access", CommonUtils.getLoggedInUserAccess());
+		return "collectionmanagement/singleassignment";
+	}
+
 	@GetMapping("/assignment/view")
 	public String assignmentView(Model model) {
 		List<CustomerDetail> customerDetails = new ArrayList<CustomerDetail>();
@@ -64,6 +79,20 @@ public class CollectionManagementRouter {
 		model.addAttribute("customerDetails", customerDetails);
 		model.addAttribute("access", CommonUtils.getLoggedInUserAccess());
 		return "collectionmanagement/listassignment";
+	}
+	
+	@GetMapping("/myassignment/view")
+	public String myAssignmentView(Principal principal, Model model) {
+		List<CustomerDetail> customerDetails = new ArrayList<CustomerDetail>();
+		try {
+			customerDetails = collectionManagementService.fetchByLoggedInUser(principal.getName());
+		} catch (Exception e) {
+			e.printStackTrace();
+			model.addAttribute("errMessage", "Unable to fetch the data at this moment");
+		}
+		model.addAttribute("customerDetails", customerDetails);
+		model.addAttribute("access", CommonUtils.getLoggedInUserAccess());
+		return "collectionmanagement/viewmyassignment";
 	}
 	
 	@GetMapping("/bulkassignment")
@@ -87,6 +116,8 @@ public class CollectionManagementRouter {
 		try {
 			if (customerDetail.getRegion() != null && customerDetail.getBuilding() != null && customerDetail.getCollectorId() != 0) {
 				collectionManagementService.updateWithCollector(customerDetail);
+				model.addAttribute("successMessage", "Assignment done successfully");
+				model.addAttribute("status", 1);
 			} else if (customerDetail.getRegion() != null && customerDetail.getBuilding() != null) {
 				List<Employee> employees = new ArrayList<Employee>();
 				employees = employeeManagementService.retrieveEmployee();
@@ -102,6 +133,46 @@ public class CollectionManagementRouter {
 		model.addAttribute("customerDetails", customerDetails);
 		model.addAttribute("access", CommonUtils.getLoggedInUserAccess());
 		return "collectionmanagement/bulkassignment";
+	}
+	
+	@PostMapping("/update")
+	public String update(@ModelAttribute("customerDetail") CustomerDetail customerDetail, Model model) {
+		try {
+			collectionManagementService.updateWithCollector(customerDetail);
+			model.addAttribute("successMessage", "Assignment done successfully");
+		} catch(Exception e) {
+			e.printStackTrace();
+			model.addAttribute("errMessage", "Unable to update the data at this moment");
+		}
+		model.addAttribute("customerDetail", customerDetail);
+		model.addAttribute("access", CommonUtils.getLoggedInUserAccess());
+		return "collectionmanagement/singleassignment";
+	}
+
+	@GetMapping("/myassignment/view/{customerId}")
+	public String myAssignmentView(@PathVariable("customerId") String customerId, Model model) {
+		CustomerDetail customerDetail = null;
+		try {
+			customerDetail = collectionManagementService.getCustomerDetailByPaymentHistory(Long.valueOf(customerId));
+		} catch (Exception e) {
+			e.printStackTrace();
+			customerDetail = new CustomerDetail();
+			model.addAttribute("errMessage", "Unable to fetch the data at this moment");
+		}
+		model.addAttribute("customerDetail", customerDetail);
+		model.addAttribute("access", CommonUtils.getLoggedInUserAccess());
+		return "collectionmanagement/payment/customerpaymentdetail";
+	}
+	
+	@PostMapping("/payment/update")
+	public String paymentUpdate(@ModelAttribute("customerDetail") CustomerDetail customerDetail, HttpServletRequest request, Model model, Principal principal) {
+		try {
+			System.out.println(ServletRequestUtils.getStringParameter(request, "payingamount"));
+		} catch (ServletRequestBindingException e) {
+			e.printStackTrace();
+		}
+		model.addAttribute("access", CommonUtils.getLoggedInUserAccess());
+		return "collectionmanagement/payment/customerpaymentdetail";
 	}
 	
 }

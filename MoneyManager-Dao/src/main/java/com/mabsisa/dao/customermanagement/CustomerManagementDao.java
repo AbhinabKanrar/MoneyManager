@@ -43,6 +43,9 @@ public interface CustomerManagementDao {
 	List<CustomerDetail> fetchByBuilding(String region);
 	
 	@Retryable(maxAttempts=CommonConstant.DB_RETRY_COUNT,value=DataAccessResourceFailureException.class,backoff=@Backoff(delay = CommonConstant.DB_RETRY_DELAY))
+	List<CustomerDetail> fetchByLoggedInUser(String username);
+	
+	@Retryable(maxAttempts=CommonConstant.DB_RETRY_COUNT,value=DataAccessResourceFailureException.class,backoff=@Backoff(delay = CommonConstant.DB_RETRY_DELAY))
 	CustomerDetail fetchByCustomerId(Long customerId);
 	
 }

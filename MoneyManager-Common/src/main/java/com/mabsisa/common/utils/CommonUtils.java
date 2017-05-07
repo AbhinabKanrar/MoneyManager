@@ -6,8 +6,11 @@ package com.mabsisa.common.utils;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -34,6 +37,12 @@ public class CommonUtils {
 			return true;
 		}
 		return false;
+	}
+
+	public static String getCurrentMMYYYY() {
+		DateFormat dateFormat = new SimpleDateFormat("MMyyyy");
+		Date date = new Date();
+		return dateFormat.format(date);
 	}
 	
 	public static String getLoggedInUserAccess() {

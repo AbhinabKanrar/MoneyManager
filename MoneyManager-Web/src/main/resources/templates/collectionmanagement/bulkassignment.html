@@ -48,16 +48,18 @@
 					<input th:if="${customerDetail.building} != null" class="w3-input" type="text" th:value="${customerDetail.building}" th:field="*{building}" readonly="true"/>
 				</p>
 				<p th:if="${customerDetail.region} != null and ${customerDetail.building} != null">
-					<label>Allocate Collector</label>
-					<select class="w3-select" required="required" th:field="*{collectorId}">
+					<label th:if="${status} != 1">Allocate Collector</label>
+					<select th:if="${status} != 1" class="w3-select" required="required" th:field="*{collectorId}">
 						<option th:each="employee : ${employees}" th:value="${employee.employeeId}" th:text="${employee.username}"></option>
 					</select>
+					<label th:if="${status} == 1">Allocated Collector</label>
+					<input type="text" class="w3-input" th:if="${status} == 1" th:field="*{collectorId}"/>
 				</p>
 				<p>
 					<button th:if="${customerDetail.region} == null or ${customerDetail.building} == null" class="w3-button w3-lime" type="submit" name="action" value="add">
 						<i class="w3-large fa fa-arrow-right">&nbsp;&nbsp;Next</i>
 					</button>
-					<button th:if="${customerDetail.region} != null and ${customerDetail.building} != null" class="w3-button w3-lime" type="submit" name="action" value="add">
+					<button th:if="${customerDetail.region} != null and ${customerDetail.building} != null and ${status} != 1" class="w3-button w3-lime" type="submit" name="action" value="add">
 						<i class="w3-large fa fa-arrow-right">&nbsp;&nbsp;Assign</i>
 					</button> 
 				</p>

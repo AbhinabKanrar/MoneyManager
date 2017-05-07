@@ -27,9 +27,9 @@ public class CustomerDetail implements Serializable {
 	private String leftTravel;
 	private long collectorId;
 	private String note;
+	private PaymentStatus paymentStatus;
 
-	public CustomerDetail() {
-	}
+	public CustomerDetail() {}
 
 	public CustomerDetail(BigDecimal fee) {
 		this.fee = fee;
@@ -137,6 +137,14 @@ public class CustomerDetail implements Serializable {
 
 	public void setNote(String note) {
 		this.note = note;
+	}
+
+	public PaymentStatus getPaymentStatus() {
+		return paymentStatus;
+	}
+
+	public void setPaymentStatus(PaymentStatus paymentStatus) {
+		this.paymentStatus = paymentStatus;
 	}
 
 }

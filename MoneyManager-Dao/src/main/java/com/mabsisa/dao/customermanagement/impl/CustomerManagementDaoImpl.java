@@ -26,6 +26,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mabsisa.common.model.CustomerDetail;
+import com.mabsisa.common.model.PaymentStatus;
 import com.mabsisa.dao.customermanagement.CustomerManagementDao;
 
 /**
@@ -50,10 +51,11 @@ public class CustomerManagementDaoImpl implements CustomerManagementDao {
 	private static final String RETRIEVE_SQL = "select * from mm.customer_details";
 	private static final String RETRIEVE_SQL_BY_DISTINCT_REGION = "SELECT DISTINCT region FROM mm.customer_details";
 	private static final String RETRIEVE_SQL_BY_DISTINCT_BUILDING = "SELECT DISTINCT building FROM mm.customer_details where region=?";
+	private static final String RETRIEVE_SQL_BY_COLLECTOR = "select * from mm.customer_details c inner join mm.user_auth_details u on c.collector_id = u.user_id and u.username=?";
 	private static final String RETRIEVE_SQL_BY_ID = "select * from mm.customer_details where customer_id =:customer_id";
 	private static final String UPDATE_SQL = "select * from mm.customer_details where customer_id = ? for update";
 	private static final String DELETE_SQL = "delete from mm.customer_details where customer_id = ?";
-	private static final String UPDATE_SQL_WITH_COLLECTOR_ID = "select * from mm.customer_details where region=? and building=? for update";
+	private static final String UPDATE_SQL_WITH_COLLECTOR_ID = "select * from mm.customer_details where region=? and building=? %s for update";
 
 	@Override
 	@Transactional(isolation = Isolation.READ_COMMITTED)
@@ -134,6 +136,7 @@ public class CustomerManagementDaoImpl implements CustomerManagementDao {
 				oldCustomerDetail.setTelephone(rs.getString("telephone"));
 				oldCustomerDetail.setLeftTravel(rs.getString("left_travel"));
 				oldCustomerDetail.setNote(rs.getString("note"));
+				oldCustomerDetail.setPaymentStatus(rs.getString("payment_status") != null ? PaymentStatus.valueOf(rs.getString("payment_status")) : null); 
 
 				rs.updateString("region", customerDetail.getRegion());
 				rs.updateString("building", customerDetail.getBuilding());
@@ -159,12 +162,26 @@ public class CustomerManagementDaoImpl implements CustomerManagementDao {
 	@Override
 	@Transactional(isolation = Isolation.READ_COMMITTED)
 	public CustomerDetail updateWithCollector(CustomerDetail customerDetail) {
-		PreparedStatementCreatorFactory queryFactory = new PreparedStatementCreatorFactory(UPDATE_SQL_WITH_COLLECTOR_ID,
-				Arrays.asList(new SqlParameter(Types.VARCHAR), new SqlParameter(Types.VARCHAR)));
-		queryFactory.setUpdatableResults(true);
-		queryFactory.setResultSetType(ResultSet.TYPE_SCROLL_SENSITIVE);
-		PreparedStatementCreator psc = queryFactory
-				.newPreparedStatementCreator(new Object[] { customerDetail.getRegion(), customerDetail.getBuilding() });
+		String sql;
+		PreparedStatementCreatorFactory queryFactory;
+		PreparedStatementCreator psc;
+		if (customerDetail.getCustomerId() != null) {
+			sql = String.format(UPDATE_SQL_WITH_COLLECTOR_ID, "and customer_id=?");
+			queryFactory = new PreparedStatementCreatorFactory(sql,
+					Arrays.asList(new SqlParameter(Types.VARCHAR), new SqlParameter(Types.VARCHAR), new SqlParameter(Types.BIGINT)));
+			queryFactory.setUpdatableResults(true);
+			queryFactory.setResultSetType(ResultSet.TYPE_SCROLL_SENSITIVE);
+			psc = queryFactory
+					.newPreparedStatementCreator(new Object[] { customerDetail.getRegion(), customerDetail.getBuilding(), customerDetail.getCustomerId() });
+		} else {
+			sql = String.format(UPDATE_SQL_WITH_COLLECTOR_ID, "");
+			queryFactory = new PreparedStatementCreatorFactory(sql,
+					Arrays.asList(new SqlParameter(Types.VARCHAR), new SqlParameter(Types.VARCHAR)));
+			queryFactory.setUpdatableResults(true);
+			queryFactory.setResultSetType(ResultSet.TYPE_SCROLL_SENSITIVE);
+			psc = queryFactory
+					.newPreparedStatementCreator(new Object[] { customerDetail.getRegion(), customerDetail.getBuilding() });
+		}
 		final CustomerDetail oldCustomerDetail = new CustomerDetail();
 		RowCallbackHandler rowHandler = new RowCallbackHandler() {
 
@@ -183,6 +200,7 @@ public class CustomerManagementDaoImpl implements CustomerManagementDao {
 				oldCustomerDetail.setLeftTravel(rs.getString("left_travel"));
 				oldCustomerDetail.setNote(rs.getString("note"));
 				oldCustomerDetail.setCollectorId(rs.getLong("collector_id"));
+				oldCustomerDetail.setPaymentStatus(rs.getString("payment_status") != null ? PaymentStatus.valueOf(rs.getString("payment_status")) : null);
 
 				rs.updateLong("collector_id", customerDetail.getCollectorId());
 
@@ -225,6 +243,7 @@ public class CustomerManagementDaoImpl implements CustomerManagementDao {
 				customerDetail.setLeftTravel(rs.getString("left_travel"));
 				customerDetail.setCollectorId(rs.getLong("collector_id"));
 				customerDetail.setNote(rs.getString("note"));
+				customerDetail.setPaymentStatus(rs.getString("payment_status") != null ? PaymentStatus.valueOf(rs.getString("payment_status")) : null);
 				return customerDetail;
 			}
 
@@ -259,6 +278,7 @@ public class CustomerManagementDaoImpl implements CustomerManagementDao {
 						customerDetail.setLeftTravel(rs.getString("left_travel"));
 						customerDetail.setCollectorId(rs.getLong("collector_id"));
 						customerDetail.setNote(rs.getString("note"));
+						customerDetail.setPaymentStatus(rs.getString("payment_status") != null ? PaymentStatus.valueOf(rs.getString("payment_status")) : null);
 						return customerDetail;
 					}
 				});
@@ -292,6 +312,37 @@ public class CustomerManagementDaoImpl implements CustomerManagementDao {
 					public CustomerDetail mapRow(ResultSet rs, int rowNum) throws SQLException {
 						final CustomerDetail customerDetail = new CustomerDetail();
 						customerDetail.setBuilding(rs.getString("building"));
+						return customerDetail;
+					}
+				});
+		if (customerDetails == null || customerDetails.isEmpty()) {
+			return null;
+		}
+		return customerDetails;
+	}
+
+	@Override
+	@Transactional(isolation = Isolation.READ_COMMITTED, readOnly = true)
+	public List<CustomerDetail> fetchByLoggedInUser(String username) {
+		List<CustomerDetail> customerDetails = jdbcTemplate.query(RETRIEVE_SQL_BY_COLLECTOR,
+				new Object[] { username }, new RowMapper<CustomerDetail>() {
+					@Override
+					public CustomerDetail mapRow(ResultSet rs, int rowNum) throws SQLException {
+						final CustomerDetail customerDetail = new CustomerDetail();
+						customerDetail.setCustomerId(rs.getLong("customer_id"));
+						customerDetail.setRegion(rs.getString("region"));
+						customerDetail.setBuilding(rs.getString("building"));
+						customerDetail.setAddress(rs.getString("address"));
+						customerDetail.setClient(rs.getString("client"));
+						customerDetail.setName(rs.getString("name"));
+						customerDetail.setFloor(rs.getString("floor"));
+						customerDetail.setFee(rs.getBigDecimal("fee"));
+						customerDetail.setMahal(rs.getString("mahal"));
+						customerDetail.setTelephone(rs.getString("telephone"));
+						customerDetail.setLeftTravel(rs.getString("left_travel"));
+						customerDetail.setCollectorId(rs.getLong("collector_id"));
+						customerDetail.setNote(rs.getString("note"));
+						customerDetail.setPaymentStatus(rs.getString("payment_status") != null ? PaymentStatus.valueOf(rs.getString("payment_status")) : null);
 						return customerDetail;
 					}
 				});
