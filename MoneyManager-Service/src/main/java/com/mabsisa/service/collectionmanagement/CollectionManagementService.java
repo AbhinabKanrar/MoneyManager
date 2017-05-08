@@ -23,5 +23,6 @@ public interface CollectionManagementService {
 	List<CustomerDetail> fetchByLoggedInUser(String username);
 	CustomerDetail getCustomerDetailByPaymentHistory(Long customerId);
 	CustomerDetail save(CustomerDetail customerDetail, BigDecimal actualAmount, String username);
+	void sync();
 	
 }

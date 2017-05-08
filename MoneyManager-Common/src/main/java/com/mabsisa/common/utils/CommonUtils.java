@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
@@ -32,6 +33,8 @@ import com.mabsisa.common.model.CustomerDetail;
  */
 public class CommonUtils {
 	
+	private static final DateFormat dateFormat = new SimpleDateFormat("MMyyyy");
+	
 	public static boolean isEmpty(String str) {
 		if (str == null || str.isEmpty()) {
 			return true;
@@ -40,9 +43,14 @@ public class CommonUtils {
 	}
 
 	public static String getCurrentMMYYYY() {
-		DateFormat dateFormat = new SimpleDateFormat("MMyyyy");
 		Date date = new Date();
 		return dateFormat.format(date);
+	}
+	
+	public static String getFutureMMYYYY(int monthCount) {
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.MONTH, monthCount);
+		return dateFormat.format(cal.getTime());
 	}
 	
 	public static String getLoggedInUserAccess() {

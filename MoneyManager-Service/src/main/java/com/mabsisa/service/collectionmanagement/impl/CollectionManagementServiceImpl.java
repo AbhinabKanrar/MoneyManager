@@ -5,6 +5,7 @@ package com.mabsisa.service.collectionmanagement.impl;
 
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,21 +93,73 @@ public class CollectionManagementServiceImpl implements CollectionManagementServ
 	public CustomerDetail save(CustomerDetail customerDetail, BigDecimal actualAmount, String username) {
 		UserDetail userDetail = authenticationDao.getUserDetailByUsername(username);
 		CustomerCollectionDetail customerCollectionDetail = collectionManagementDao.fetchCustomerCollectionDetail(customerDetail.getCustomerId());
-		if (customerCollectionDetail == null) {
-			customerCollectionDetail = new CustomerCollectionDetail();
+		if (userDetail != null && customerCollectionDetail != null) {
+			customerCollectionDetail.setCollectorId(userDetail.getUserId());
+			PaymentDetail paymentDetail = new PaymentDetail();
+			if (actualAmount.compareTo(customerDetail.getFee()) > 0) {
+				BigDecimal excessAmount = actualAmount.subtract(customerDetail.getFee());
+				int count = 1;
+				List<PaymentDetail> paymentDetails = new ArrayList<PaymentDetail>();
+				while(excessAmount.compareTo(new BigDecimal("0.00")) == 0) {
+					paymentDetail = new PaymentDetail();
+					paymentDetail.setPaymentStatus(PaymentStatus.PAID);
+					paymentDetail.setMmyy(CommonUtils.getFutureMMYYYY(count-1));
+					paymentDetail.setRequestedAmount(customerDetail.getFee());
+					paymentDetail.setPaidAmount(excessAmount.compareTo(customerDetail.getFee()) >= 0 ? customerDetail.getFee() : excessAmount);
+					paymentDetail.setCollectionDate(new Date(System.currentTimeMillis()));
+					excessAmount = excessAmount.subtract(customerDetail.getFee());
+					paymentDetails.add(paymentDetail);
+					count++;
+				}
+				customerCollectionDetail.setPaymentDetails(paymentDetails);
+			} else {
+				if (actualAmount.compareTo(new BigDecimal("0.00")) == 0) {
+					paymentDetail.setPaymentStatus(PaymentStatus.UNPAID);
+					paymentDetail.setMmyy(CommonUtils.getCurrentMMYYYY());
+					paymentDetail.setRequestedAmount(customerDetail.getFee());
+					paymentDetail.setPaidAmount(actualAmount);
+					paymentDetail.setCollectionDate(new Date(System.currentTimeMillis()));
+				} else if (actualAmount.compareTo(customerDetail.getFee()) < 0) {
+					paymentDetail.setPaymentStatus(PaymentStatus.PARTIALLY_PAID);
+					paymentDetail.setMmyy(CommonUtils.getCurrentMMYYYY());
+					paymentDetail.setRequestedAmount(customerDetail.getFee());
+					paymentDetail.setPaidAmount(actualAmount);
+					paymentDetail.setCollectionDate(new Date(System.currentTimeMillis()));
+				} else if (actualAmount.compareTo(customerDetail.getFee()) == 0) {
+					paymentDetail.setPaymentStatus(PaymentStatus.PAID);
+					paymentDetail.setMmyy(CommonUtils.getCurrentMMYYYY());
+					paymentDetail.setRequestedAmount(customerDetail.getFee());
+					paymentDetail.setPaidAmount(actualAmount);
+					paymentDetail.setCollectionDate(new Date(System.currentTimeMillis()));
+				}
+				if (customerCollectionDetail.getPaymentDetails() != null && !customerCollectionDetail.getPaymentDetails().isEmpty()) {
+					customerCollectionDetail.getPaymentDetails().add(paymentDetail);
+				} else {
+					List<PaymentDetail> paymentDetails = new ArrayList<PaymentDetail>();
+					paymentDetails.add(paymentDetail);
+					customerCollectionDetail.setPaymentDetails(paymentDetails);
+				}
+			}
+			
 		}
-		PaymentDetail paymentDetail = new PaymentDetail();
-		paymentDetail.setMmyy(CommonUtils.getCurrentMMYYYY());
-		paymentDetail.setRequestedAmount(customerDetail.getFee());
-		paymentDetail.setPaidAmount(actualAmount);
-		paymentDetail.setCollectionDate(new Date(System.currentTimeMillis()));
-		if (actualAmount.compareTo(customerDetail.getFee()) == -1) {
-			paymentDetail.setPaymentStatus(PaymentStatus.PARTIALLY_PAID);
-		} else if (actualAmount.compareTo(customerDetail.getFee()) >= 0) {
-			paymentDetail.setPaymentStatus(PaymentStatus.PAID);
+		return customerDetail;
+	}
+
+	@Override
+	public void sync() {
+		List<CustomerDetail> customerDetails = customerManagementDao.retrieveCustomerDetail();
+		if (customerDetails != null && !customerDetails.isEmpty()) {
+			CustomerCollectionDetail customerCollectionDetail;
+			for (CustomerDetail customerDetail : customerDetails) {
+				customerCollectionDetail = new CustomerCollectionDetail();
+				customerCollectionDetail.setCustomerId(customerDetail.getCustomerId());
+				try {
+					collectionManagementDao.save(customerCollectionDetail);
+				} catch(Exception e) {
+					
+				}
+			}
 		}
-		
-		return null;
 	}
 
 }

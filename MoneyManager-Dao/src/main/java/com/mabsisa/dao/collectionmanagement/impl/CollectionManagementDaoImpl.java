@@ -8,8 +8,10 @@ import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -48,8 +50,26 @@ public class CollectionManagementDaoImpl implements CollectionManagementDao {
 
 	// private static final String RETRIEVE_SQL = "SELECT * FROM
 	// mm.collection_details";
+	private static final String INSERT_SQL = "INSERT INTO mm.customer_collection_details (collection_id,customer_id,collector_id,txn_data) VALUES (:collection_id,:customer_id,:collector_id,:txn_data)";
 	private static final String RETRIEVE_SQL_BY_CUSTOMER = "SELECT * FROM mm.customer_collection_details where customer_id=:customer_id";
 
+	@Override
+	@Transactional(isolation = Isolation.READ_COMMITTED)
+	public CustomerCollectionDetail save(CustomerCollectionDetail customerCollectionDetail) {
+		Map<String, Object> params = new HashMap<>(4);
+		customerCollectionDetail.setCollectionId(UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE);
+		
+		params.put("collection_id", customerCollectionDetail.getCollectionId());
+		params.put("customer_id", customerCollectionDetail.getCustomerId());
+		params.put("collector_id", null);
+		params.put("txn_data", null);
+
+		jdbcNTemplate.update(INSERT_SQL, params);
+		
+		return customerCollectionDetail;
+	}
+	
+	
 	@Override
 	@Transactional(isolation = Isolation.READ_COMMITTED, readOnly = true)
 	public List<CollectionDetail> retrieveCollectionDetails() {
@@ -92,11 +112,13 @@ public class CollectionManagementDaoImpl implements CollectionManagementDao {
 							customerCollectionDetail.setCustomerId(rs.getLong("customer_id"));
 							customerCollectionDetail.setCollectorId(rs.getLong("collector_id"));
 							byte[] json = rs.getBytes("txn_data");
-							try {
-								List<PaymentDetail> paymentDetails = objectMapper.readValue(json,new TypeReference<List<PaymentDetail>>() {});
-								customerCollectionDetail.setPaymentDetails(paymentDetails);
-							} catch (IOException e) {
-								e.printStackTrace();
+							if (json != null) {
+								try {
+									List<PaymentDetail> paymentDetails = objectMapper.readValue(json,new TypeReference<List<PaymentDetail>>() {});
+									customerCollectionDetail.setPaymentDetails(paymentDetails);
+								} catch (IOException e) {
+									e.printStackTrace();
+								}
 							}
 							return customerCollectionDetail;
 						} else {
@@ -115,10 +137,10 @@ public class CollectionManagementDaoImpl implements CollectionManagementDao {
 	}
 
 	
-	private CustomerCollectionDetail save(CustomerCollectionDetail customerCollectionDetail) {
-		
-		return customerCollectionDetail; 
-
-	}
+//	private CustomerCollectionDetail save(CustomerCollectionDetail customerCollectionDetail) {
+//		
+//		return customerCollectionDetail; 
+//
+//	}
 	
 }

@@ -22,6 +22,9 @@ import com.mabsisa.common.utils.CommonConstant;
 public interface CollectionManagementDao {
 
 	@Retryable(maxAttempts=CommonConstant.DB_RETRY_COUNT,value=DataAccessResourceFailureException.class,backoff=@Backoff(delay = CommonConstant.DB_RETRY_DELAY))
+	CustomerCollectionDetail save(CustomerCollectionDetail customerCollectionDetail);
+	
+	@Retryable(maxAttempts=CommonConstant.DB_RETRY_COUNT,value=DataAccessResourceFailureException.class,backoff=@Backoff(delay = CommonConstant.DB_RETRY_DELAY))
 	List<CollectionDetail> retrieveCollectionDetails();
 	
 	@Retryable(maxAttempts=CommonConstant.DB_RETRY_COUNT,value=DataAccessResourceFailureException.class,backoff=@Backoff(delay = CommonConstant.DB_RETRY_DELAY))

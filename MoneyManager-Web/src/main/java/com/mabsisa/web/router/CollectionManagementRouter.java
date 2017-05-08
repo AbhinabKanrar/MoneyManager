@@ -3,6 +3,7 @@
  */
 package com.mabsisa.web.router;
 
+import java.math.BigDecimal;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
@@ -149,7 +150,7 @@ public class CollectionManagementRouter {
 		return "collectionmanagement/singleassignment";
 	}
 
-	@GetMapping("/myassignment/view/{customerId}")
+	@GetMapping("/myassignment/viewbycustomerid/{customerId}")
 	public String myAssignmentView(@PathVariable("customerId") String customerId, Model model) {
 		CustomerDetail customerDetail = null;
 		try {
@@ -167,12 +168,30 @@ public class CollectionManagementRouter {
 	@PostMapping("/payment/update")
 	public String paymentUpdate(@ModelAttribute("customerDetail") CustomerDetail customerDetail, HttpServletRequest request, Model model, Principal principal) {
 		try {
-			System.out.println(ServletRequestUtils.getStringParameter(request, "payingamount"));
+			customerDetail = collectionManagementService.save(customerDetail, new BigDecimal(ServletRequestUtils.getStringParameter(request, "payingamount")), principal.getName());
+			model.addAttribute("successMessage", "Customer payment data updated successfully");
 		} catch (ServletRequestBindingException e) {
 			e.printStackTrace();
+			model.addAttribute("errMessage", "Unable to update customer data at this moment");
 		}
 		model.addAttribute("access", CommonUtils.getLoggedInUserAccess());
 		return "collectionmanagement/payment/customerpaymentdetail";
+	}
+
+	@GetMapping("/sync")
+	public String sync(Model model) {
+		List<CustomerDetail> customerDetails = new ArrayList<CustomerDetail>();
+		try {
+			collectionManagementService.sync();
+			customerDetails = customerManagementService.retrieveCustomerDetail();
+			model.addAttribute("successMessage", "Synced with the system");
+		} catch (Exception e) {
+			e.printStackTrace();
+			model.addAttribute("errMessage", "Data synced; but unable to fetch the customer data at this moment");
+		}
+		model.addAttribute("customerDetails", customerDetails);
+		model.addAttribute("access", CommonUtils.getLoggedInUserAccess());
+		return "customermanagement/listcustomer";
 	}
 	
 }
