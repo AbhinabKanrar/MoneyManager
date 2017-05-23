@@ -18,7 +18,7 @@ public class Test {
 		cal.add(Calendar.MONTH, 0);
 		System.out.println(dateFormat.format(cal.getTime()));
 		System.out.println();
-		
+			
 	}
 
 }
